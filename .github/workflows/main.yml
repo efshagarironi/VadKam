@@ -1,4 +1,4 @@
-name: Build APK
+Name: Build APK
 on: [push, workflow_dispatch]
 jobs:
   build:
@@ -1944,243 +1944,243 @@ jobs:
                   LinearLayout r = vbox();
                   r.addView(topBar(t("زبان", "Language"), fg));
                   r.addView(row(0xFFEC407A, "ف", "فارسی", null, fa ? 1 : 0, fg, v -> setLang("fa")));
-r.addView(row(0xFF42A5F5, "En", "English", null, !fa ? 1 : 0, fg, v -> setLang("en")));
-return r;
-} 
+                  r.addView(row(0xFF42A5F5, "En", "English", null, !fa ? 1 : 0, fg, v -> setLang("en")));
+                  return r;
+              }
 
-void setLang(String l) {
-sp.edit().putString("lang", l).apply();
-fa = l.equals("fa");
-notifyBar();
-show();
-} 
+              void setLang(String l) {
+                  sp.edit().putString("lang", l).apply();
+                  fa = l.equals("fa");
+                  notifyBar();
+                  show();
+              }
 
-// ================= picker =================
-void openPicker(String target) {
-PackageManager pm = getPackageManager();
-Intent q = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
-Set<String> seen = new HashSet<>();
-allApps = new ArrayList<>();
-for (ResolveInfo ri : pm.queryIntentActivities(q, 0)) {
-String p = ri.activityInfo.packageName;
-if (p.equals(getPackageName()) || !seen.add(p)) continue;
-AppItem a = new AppItem();
-a.pkg = p;
-a.label = ri.loadLabel(pm).toString();
-a.icon = ri.loadIcon(pm);
-allApps.add(a);
-}
-Collections.sort(allApps, (x, y) -> x.label.compareToIgnoreCase(y.label));
-selected.clear();
-query = "";
-pickTarget = target;
-added = new ArrayList<>();
-for (Item it : home) {
-if (it.folder) added.addAll(it.apps);
-else if (target == null) added.add(it.pkg);
-}
-page = PICKER;
-show();
-} 
+              // ================= picker =================
+              void openPicker(String target) {
+                  PackageManager pm = getPackageManager();
+                  Intent q = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+                  Set<String> seen = new HashSet<>();
+                  allApps = new ArrayList<>();
+                  for (ResolveInfo ri : pm.queryIntentActivities(q, 0)) {
+                      String p = ri.activityInfo.packageName;
+                      if (p.equals(getPackageName()) || !seen.add(p)) continue;
+                      AppItem a = new AppItem();
+                      a.pkg = p;
+                      a.label = ri.loadLabel(pm).toString();
+                      a.icon = ri.loadIcon(pm);
+                      allApps.add(a);
+                  }
+                  Collections.sort(allApps, (x, y) -> x.label.compareToIgnoreCase(y.label));
+                  selected.clear();
+                  query = "";
+                  pickTarget = target;
+                  added = new ArrayList<>();
+                  for (Item it : home) {
+                      if (it.folder) added.addAll(it.apps);
+                      else if (target == null) added.add(it.pkg);
+                  }
+                  page = PICKER;
+                  show();
+              }
 
-List<AppItem> visible() {
-List<AppItem> l = new ArrayList<>();
-for (AppItem a : allApps)
-if (query.isEmpty() || a.label.toLowerCase().contains(query)) l.add(a);
-return l;
-} 
+              List<AppItem> visible() {
+                  List<AppItem> l = new ArrayList<>();
+                  for (AppItem a : allApps)
+                      if (query.isEmpty() || a.label.toLowerCase().contains(query)) l.add(a);
+                  return l;
+              }
 
-boolean allSel() {
-int n = 0;
-for (AppItem a : visible()) {
-if (added.contains(a.pkg)) continue;
-n++;
-if (!selected.contains(a.pkg)) return false;
-}
-return n > 0;
-} 
+              boolean allSel() {
+                  int n = 0;
+                  for (AppItem a : visible()) {
+                      if (added.contains(a.pkg)) continue;
+                      n++;
+                      if (!selected.contains(a.pkg)) return false;
+                  }
+                  return n > 0;
+              }
 
-View pickerPage(final int fg) {
-LinearLayout r = vbox();
-r.addView(topBar(t("افزودن برنامه‌ها", "Add apps"), fg)); 
+              View pickerPage(final int fg) {
+                  LinearLayout r = vbox();
+                  r.addView(topBar(t("افزودن برنامه‌ها", "Add apps"), fg));
 
-final EditText et = new EditText(this);
-et.setHint(t("جستجو...", "Search..."));
-et.setHintTextColor(0x88888888);
-et.setTextColor(fg);
-et.setSingleLine(true);
-et.setPadding(dp(14), dp(10), dp(14), dp(10));
-GradientDrawable sg = new GradientDrawable();
-sg.setCornerRadius(dp(14));
-sg.setColor(light() ? 0x14000000 : 0x1AFFFFFF);
-et.setBackground(sg);
-et.addTextChangedListener(new TextWatcher() {
-public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
-public void onTextChanged(CharSequence s, int a, int b, int c) { }
-public void afterTextChanged(Editable s) {
-query = s.toString().trim().toLowerCase();
-fillList();
-updateTop();
-}
-});
-LinearLayout.LayoutParams el = new LinearLayout.LayoutParams(-1, -2);
-el.setMargins(0, dp(12), 0, 0);
-r.addView(et, el); 
+                  final EditText et = new EditText(this);
+                  et.setHint(t("جستجو...", "Search..."));
+                  et.setHintTextColor(0x88888888);
+                  et.setTextColor(fg);
+                  et.setSingleLine(true);
+                  et.setPadding(dp(14), dp(10), dp(14), dp(10));
+                  GradientDrawable sg = new GradientDrawable();
+                  sg.setCornerRadius(dp(14));
+                  sg.setColor(light() ? 0x14000000 : 0x1AFFFFFF);
+                  et.setBackground(sg);
+                  et.addTextChangedListener(new TextWatcher() {
+                      public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
+                      public void onTextChanged(CharSequence s, int a, int b, int c) { }
+                      public void afterTextChanged(Editable s) {
+                          query = s.toString().trim().toLowerCase();
+                          fillList();
+                          updateTop();
+                      }
+                  });
+                  LinearLayout.LayoutParams el = new LinearLayout.LayoutParams(-1, -2);
+                  el.setMargins(0, dp(12), 0, 0);
+                  r.addView(et, el);
 
-LinearLayout all = new LinearLayout(this);
-all.setGravity(Gravity.CENTER_VERTICAL);
-all.setPadding(dp(4), dp(12), dp(12), dp(12));
-allDot = new View(this);
-LinearLayout.LayoutParams dl = new LinearLayout.LayoutParams(dp(22), dp(22));
-dl.setMarginEnd(dp(10));
-all.addView(allDot, dl);
-allText = new TextView(this);
-allText.setTextSize(16);
-allText.setTextColor(fg);
-all.addView(allText);
-all.setOnClickListener(v -> {
-if (allSel()) {
-selected.clear();
-} else {
-for (AppItem a : visible())
-if (!added.contains(a.pkg)) selected.add(a.pkg);
-}
-fillList();
-updateTop();
-});
-r.addView(all, new LinearLayout.LayoutParams(-2, -2)); 
+                  LinearLayout all = new LinearLayout(this);
+                  all.setGravity(Gravity.CENTER_VERTICAL);
+                  all.setPadding(dp(4), dp(12), dp(12), dp(12));
+                  allDot = new View(this);
+                  LinearLayout.LayoutParams dl = new LinearLayout.LayoutParams(dp(22), dp(22));
+                  dl.setMarginEnd(dp(10));
+                  all.addView(allDot, dl);
+                  allText = new TextView(this);
+                  allText.setTextSize(16);
+                  allText.setTextColor(fg);
+                  all.addView(allText);
+                  all.setOnClickListener(v -> {
+                      if (allSel()) {
+                          selected.clear();
+                      } else {
+                          for (AppItem a : visible())
+                              if (!added.contains(a.pkg)) selected.add(a.pkg);
+                      }
+                      fillList();
+                      updateTop();
+                  });
+                  r.addView(all, new LinearLayout.LayoutParams(-2, -2));
 
-ScrollView sv = new ScrollView(this);
-listBox = new LinearLayout(this);
-listBox.setOrientation(LinearLayout.VERTICAL);
-sv.addView(listBox);
-r.addView(sv, new LinearLayout.LayoutParams(-1, 0, 1)); 
+                  ScrollView sv = new ScrollView(this);
+                  listBox = new LinearLayout(this);
+                  listBox.setOrientation(LinearLayout.VERTICAL);
+                  sv.addView(listBox);
+                  r.addView(sv, new LinearLayout.LayoutParams(-1, 0, 1));
 
-addBtn = new Button(this);
-addBtn.setAllCaps(false);
-addBtn.setTextColor(0xFFFFFFFF);
-GradientDrawable ag = new GradientDrawable();
-ag.setCornerRadius(dp(14));
-ag.setColor(0xFF3D7BF7);
-addBtn.setBackground(ag);
-addBtn.setOnClickListener(v -> {
-if (selected.isEmpty()) {
-Toast.makeText(this, t("برنامه‌ای انتخاب نشده", "No app selected"),
-Toast.LENGTH_SHORT).show();
-return;
-}
-if (pickTarget == null) {
-for (String p : selected) {
-Item a = new Item();
-a.pkg = p;
-home.add(a);
-}
-} else {
-Item f = findFolder(pickTarget);
-if (f != null) {
-for (String p : selected) if (!f.apps.contains(p)) f.apps.add(p);
-home.removeIf(q -> !q.folder && selected.contains(q.pkg));
-}
-}
-saveHome();
-pickTarget = null;
-page = HOME;
-show();
-});
-LinearLayout.LayoutParams bl = new LinearLayout.LayoutParams(-1, dp(52));
-bl.setMargins(0, dp(10), 0, 0);
-r.addView(addBtn, bl); 
+                  addBtn = new Button(this);
+                  addBtn.setAllCaps(false);
+                  addBtn.setTextColor(0xFFFFFFFF);
+                  GradientDrawable ag = new GradientDrawable();
+                  ag.setCornerRadius(dp(14));
+                  ag.setColor(0xFF3D7BF7);
+                  addBtn.setBackground(ag);
+                  addBtn.setOnClickListener(v -> {
+                      if (selected.isEmpty()) {
+                          Toast.makeText(this, t("برنامه‌ای انتخاب نشده", "No app selected"),
+                                  Toast.LENGTH_SHORT).show();
+                          return;
+                      }
+                      if (pickTarget == null) {
+                          for (String p : selected) {
+                              Item a = new Item();
+                              a.pkg = p;
+                              home.add(a);
+                          }
+                      } else {
+                          Item f = findFolder(pickTarget);
+                          if (f != null) {
+                              for (String p : selected) if (!f.apps.contains(p)) f.apps.add(p);
+                              home.removeIf(q -> !q.folder && selected.contains(q.pkg));
+                          }
+                      }
+                      saveHome();
+                      pickTarget = null;
+                      page = HOME;
+                      show();
+                  });
+                  LinearLayout.LayoutParams bl = new LinearLayout.LayoutParams(-1, dp(52));
+                  bl.setMargins(0, dp(10), 0, 0);
+                  r.addView(addBtn, bl);
 
-fillList();
-updateTop();
-return r;
-} 
+                  fillList();
+                  updateTop();
+                  return r;
+              }
 
-void fillList() {
-listBox.removeAllViews();
-for (final AppItem a : visible()) {
-final boolean isAdded = added.contains(a.pkg);
-LinearLayout row = new LinearLayout(this);
-row.setGravity(Gravity.CENTER_VERTICAL);
-row.setPadding(dp(8), dp(8), dp(8), dp(8));
-row.addView(roundIcon(a.icon, 40));
-TextView tv = new TextView(this);
-tv.setText(a.label);
-tv.setTextSize(16);
-tv.setTextColor(fgc);
-tv.setMaxLines(1);
-tv.setEllipsize(TextUtils.TruncateAt.END);
-LinearLayout.LayoutParams tl = new LinearLayout.LayoutParams(0, -2, 1);
-tl.setMarginStart(dp(12));
-tl.setMarginEnd(dp(12));
-row.addView(tv, tl);
-final TextView tick = new TextView(this);
-tick.setText("✓");
-tick.setTextSize(14);
-tick.setGravity(Gravity.CENTER);
-tick.setLayoutParams(new LinearLayout.LayoutParams(dp(26), dp(26)));
-styleTick(tick, isAdded ? 2 : (selected.contains(a.pkg) ? 1 : 0));
-row.addView(tick);
-row.setOnClickListener(v -> {
-if (isAdded) return;
-if (selected.remove(a.pkg)) styleTick(tick, 0);
-else { selected.add(a.pkg); styleTick(tick, 1); }
-updateTop();
-});
-row.setOnLongClickListener(v -> {
-if (!isAdded && !selected.contains(a.pkg)) {
-selected.add(a.pkg);
-styleTick(tick, 1);
-updateTop();
-}
-return true;
-});
-listBox.addView(row);
-}
-} 
+              void fillList() {
+                  listBox.removeAllViews();
+                  for (final AppItem a : visible()) {
+                      final boolean isAdded = added.contains(a.pkg);
+                      LinearLayout row = new LinearLayout(this);
+                      row.setGravity(Gravity.CENTER_VERTICAL);
+                      row.setPadding(dp(8), dp(8), dp(8), dp(8));
+                      row.addView(roundIcon(a.icon, 40));
+                      TextView tv = new TextView(this);
+                      tv.setText(a.label);
+                      tv.setTextSize(16);
+                      tv.setTextColor(fgc);
+                      tv.setMaxLines(1);
+                      tv.setEllipsize(TextUtils.TruncateAt.END);
+                      LinearLayout.LayoutParams tl = new LinearLayout.LayoutParams(0, -2, 1);
+                      tl.setMarginStart(dp(12));
+                      tl.setMarginEnd(dp(12));
+                      row.addView(tv, tl);
+                      final TextView tick = new TextView(this);
+                      tick.setText("✓");
+                      tick.setTextSize(14);
+                      tick.setGravity(Gravity.CENTER);
+                      tick.setLayoutParams(new LinearLayout.LayoutParams(dp(26), dp(26)));
+                      styleTick(tick, isAdded ? 2 : (selected.contains(a.pkg) ? 1 : 0));
+                      row.addView(tick);
+                      row.setOnClickListener(v -> {
+                          if (isAdded) return;
+                          if (selected.remove(a.pkg)) styleTick(tick, 0);
+                          else { selected.add(a.pkg); styleTick(tick, 1); }
+                          updateTop();
+                      });
+                      row.setOnLongClickListener(v -> {
+                          if (!isAdded && !selected.contains(a.pkg)) {
+                              selected.add(a.pkg);
+                              styleTick(tick, 1);
+                              updateTop();
+                          }
+                          return true;
+                      });
+                      listBox.addView(row);
+                  }
+              }
 
-void styleTick(TextView tk, int s) {
-GradientDrawable g = new GradientDrawable();
-g.setShape(GradientDrawable.OVAL);
-if (s == 0) {
-g.setColor(0);
-g.setStroke(dp(2), 0xFF888888);
-tk.setTextColor(0);
-} else {
-g.setColor(s == 1 ? 0xFF34C759 : 0xFF8A8A8A);
-tk.setTextColor(0xFFFFFFFF);
-}
-tk.setBackground(g);
-} 
+              void styleTick(TextView tk, int s) {
+                  GradientDrawable g = new GradientDrawable();
+                  g.setShape(GradientDrawable.OVAL);
+                  if (s == 0) {
+                      g.setColor(0);
+                      g.setStroke(dp(2), 0xFF888888);
+                      tk.setTextColor(0);
+                  } else {
+                      g.setColor(s == 1 ? 0xFF34C759 : 0xFF8A8A8A);
+                      tk.setTextColor(0xFFFFFFFF);
+                  }
+                  tk.setBackground(g);
+              }
 
-void updateTop() {
-boolean s = allSel();
-allText.setText(s ? t("لغو", "Cancel") : t("همه", "All"));
-GradientDrawable g = oval(s ? 0xFF34C759 : 0);
-if (!s) g.setStroke(dp(2), fgc);
-allDot.setBackground(g);
-addBtn.setText(t("افزودن", "Add") + " (" + selected.size() + ")");
-} 
+              void updateTop() {
+                  boolean s = allSel();
+                  allText.setText(s ? t("لغو", "Cancel") : t("همه", "All"));
+                  GradientDrawable g = oval(s ? 0xFF34C759 : 0);
+                  if (!s) g.setStroke(dp(2), fgc);
+                  allDot.setBackground(g);
+                  addBtn.setText(t("افزودن", "Add") + " (" + selected.size() + ")");
+              }
 
-ImageView roundIcon(Drawable d, int size) {
-ImageView iv = new ImageView(this);
-iv.setImageDrawable(d);
-iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-iv.setOutlineProvider(new ViewOutlineProvider() {
-@Override
-public void getOutline(View v, Outline o) {
-o.setOval(0, 0, v.getWidth(), v.getHeight());
-}
-});
-iv.setClipToOutline(true);
-iv.setLayoutParams(new LinearLayout.LayoutParams(dp(size), dp(size)));
-return iv;
-}
-}
-EOF
-- name: Build
-run: gradle assembleDebug --no-daemon
-- uses: actions/upload-artifact@v4
-with:
-name: app-debug
-path: app/build/outputs/apk/debug/app-debug.apk
+              ImageView roundIcon(Drawable d, int size) {
+                  ImageView iv = new ImageView(this);
+                  iv.setImageDrawable(d);
+                  iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                  iv.setOutlineProvider(new ViewOutlineProvider() {
+                      @Override
+                      public void getOutline(View v, Outline o) {
+                          o.setOval(0, 0, v.getWidth(), v.getHeight());
+                      }
+                  });
+                  iv.setClipToOutline(true);
+                  iv.setLayoutParams(new LinearLayout.LayoutParams(dp(size), dp(size)));
+                  return iv;
+              }
+          }
+          EOF
+      - name: Build
+        run: gradle assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
